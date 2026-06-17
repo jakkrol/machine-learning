@@ -1,0 +1,11 @@
+id,nazwa,kategoria,cena_aktualna,cena_docelowa,dostepnosc,sklep
+1,Klawiatura Mechaniczna RGB,Elektronika,349.99,300.00,w magazynie,Morele
+2,Myszka Bezprzewodowa,Elektronika,189.00,150.00,w magazynie,MediaExpert
+3,Monitor 4K IPS 27,Elektronika,1450.00,1200.00,brak,Amazon
+4,Fotel Biurowy Ergonomiczny,Dom,,550.00,w magazynie,Allegro
+5,Słuchawki ANC,Elektronika,599.00,500.00,w magazynie,Morele
+6,Podkładka pod mysz XL,Elektronika,79.99,50.00,,Allegro
+7,Biurko Elektryczne,Dom,1200.00,1000.00,w magazynie,IKEA
+8,Kabel HDMI 2.1,Elektronika,49.99,40.00,w magazynie,MediaExpert
+9,Smartfon X10,Elektronika,2999.00,2500.00,brak,Amazon
+10,Lampa biurkowa LED,Dom,120.00,90.00,w magazynie,IKEA
