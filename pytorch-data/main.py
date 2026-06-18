@@ -16,7 +16,11 @@ import torch
 # print(rnd_t.dtype)
 # print(rnd_t)
 
-random_img = torch.rand(size=(224,224,3))
-print(random_img.shape,'\n', random_img.ndim)
-zeros = torch.zeros(size=(3,4))
-print(zeros, '\n', zeros.dtype)
+# random_img = torch.rand(size=(224,224,3))
+# print(random_img.shape,'\n', random_img.ndim)
+# zeros = torch.zeros(size=(3,4))
+# print(zeros, '\n', zeros.dtype)
+
+data = [1,2,3]
+tn = torch.tensor(data, requires_grad=True)
+print(tn.shape)
