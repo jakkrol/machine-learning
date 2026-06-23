@@ -22,6 +22,12 @@ selected_sv = ['PG01', 'PE03', 'PR06', 'PC06', 'PC25', 'PJ02']
 ######### PJ02 #########
 #J002 2017:152:00000 0000:000:00000 J02 [PR01]
 #J002 2017-028A  42738 QZS-2I          Launched 2017-06-01; MICHIBIKI-2
+
+
+#https://cddis.nasa.gov/archive/gnss/products/2419/
+#https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle
+#https://files.igs.org/pub/station/general/igs_satellite_metadata.snx
+#https://www.space-track.org/#/queryBuilder
 import georinex as gr
 
 file_path = 'orbit_raw/raw_sp3_data/COD0MGXFIN_20261370000_01D_05M_ORB.SP3'
