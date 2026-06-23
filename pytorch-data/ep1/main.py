@@ -3,14 +3,8 @@ from torch import nn
 import matplotlib.pyplot as plt
 
 print(torch.__version__)
-
-what_were_covering = {1: "data (prepare and load)",
-    2: "build model",
-    3: "fitting the model to data (training)",
-    4: "making predictions and evaluating a model (inference)",
-    5: "saving and loading a model",
-    6: "putting it all together"
-}
+device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"Used: {device}" )
 
 # Create *known* parameters
 weight = 0.7
@@ -44,22 +38,87 @@ def plot_pr(train_data=X_train,
     
     plt.legend(prop={"size": 14});
 
-plot_pr()
+#plot_pr()
 #plt.show()
 
 
-# Create a Linear Regression model class
-class LinearRegressionModel(nn.Module): # <- almost everything in PyTorch is a nn.Module (think of this as neural network lego blocks)
+class LinearRegressionModel(nn.Module): 
     def __init__(self):
         super().__init__() 
-        self.weights = nn.Parameter(torch.randn(1, # <- start with random weights (this will get adjusted as the model learns)
-                                                dtype=torch.float), # <- PyTorch loves float32 by default
-                                   requires_grad=True) # <- can we update this value with gradient descent?)
+        #self.l1 = nn.Linear(in_features=1, out_features=8)
+        #self.l2 = nn.Linear(in_features=8, out_features=1)
+        self.l3 = nn.Linear(in_features=1, out_features=1)
+        #self.relu = nn.ReLU()
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        #x = self.l1(x)
+        #x = self.relu(x)
+        #x = self.l2(x)
+        #x = self.relu(x)
+        x = self.l3(x) 
+        return x
 
-        self.bias = nn.Parameter(torch.randn(1, # <- start with random bias (this will get adjusted as the model learns)
-                                            dtype=torch.float), # <- PyTorch loves float32 by default
-                                requires_grad=True) # <- can we update this value with gradient descent?))
+torch.manual_seed(42)
+model_0 = LinearRegressionModel()
+print(list(model_0.parameters()))
 
-    # Forward defines the computation in the model
-    def forward(self, x: torch.Tensor) -> torch.Tensor: # <- "x" is the input data (e.g. training/testing features)
-        return self.weights * x + self.bias # <- this is the linear regression formula (y = m*x + b)
+
+print(next(model_0.parameters()).device)
+model_0.to(device=device)
+print(next(model_0.parameters()).device)
+
+X_train = X_train.to(device)
+X_test = X_test.to(device)
+y_train = y_train.to(device)
+y_test = y_test.to(device)
+
+with torch.inference_mode():
+    y_preds = model_0(X_test)
+
+# Check the predictions
+print(f"Number of testing samples: {len(X_test)}") 
+print(f"Number of predictions made: {len(y_preds)}")
+print(f"Predicted values:\n{y_preds}")
+
+#plot_pr(predictions=y_preds)
+#plt.show()
+
+
+lf = nn.L1Loss()
+optimizer = torch.optim.SGD(params=model_0.parameters(), lr=0.01)
+
+# epoch_count = []
+# train_lossV = []
+# test_lossV = []
+epochs = 1000
+
+for epoch in range(epochs):
+    model_0.train()
+    y_preds = model_0(X_train)
+    loss = lf(y_preds, y_train)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+
+    model_0.eval()
+
+    with torch.inference_mode():
+        test_pred = model_0(X_test)
+        test_loss = lf(test_pred, y_test.type(torch.float))
+    if epoch % 100 == 0:
+        print(f"Epoch: {epoch} | MAE Train Loss: {loss} | MAE Test Loss: {test_loss} ")
+
+# plt.plot(epoch_count, train_lossV, label="Train loss")
+# plt.plot(epoch_count, test_lossV, label="Test loss")
+# plt.xlabel("Loss")
+# plt.ylabel("Epochs")
+# plt.show()
+
+print(model_0.state_dict())
+print(f"weights: {weight}, bias: {bias}")
+
+
+with torch.inference_mode():
+    y_preds = model_0(X_test)
+plot_pr(predictions=y_preds.cpu())
+plt.show()
