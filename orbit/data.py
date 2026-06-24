@@ -28,6 +28,8 @@ selected_sv = ['PG01', 'PE03', 'PR06', 'PC06', 'PC25', 'PJ02']
 #https://celestrak.org/NORAD/elements/gp.php?GROUP=active&FORMAT=tle
 #https://files.igs.org/pub/station/general/igs_satellite_metadata.snx
 #https://www.space-track.org/#/queryBuilder
+#https://www.ngdc.noaa.gov/stp/space-weather/swpc-products/annual_reports/daily_solar_indices_summaries/daily_geomagnetic_data/
+#https://www.ngdc.noaa.gov/stp/space-weather/swpc-products/annual_reports/daily_solar_indices_summaries/daily_solar_data/
 import georinex as gr
 
 file_path = 'orbit_raw/raw_sp3_data/COD0MGXFIN_20261370000_01D_05M_ORB.SP3'
