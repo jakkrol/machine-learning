@@ -25,10 +25,16 @@ circles.head(10)
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 print(len(x_train), len(x_test), len(y_train), len(y_test))
 
-class myModel(nn.Module):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
+# class myModel(nn.Module):
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.l1 = nn.Linear(2, 1)
+#     def forward(self, x: torch.Tensor) -> torch.Tensor:
         
-        return x
+#         return x
+
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model = nn.Sequential(nn.Linear(2, 1)).to(device)
+
+loss_fn = nn.BCEWithLogitsLoss()
+optimizer = torch.optim.SGD(params=model.parameters(), lr=0.01)
