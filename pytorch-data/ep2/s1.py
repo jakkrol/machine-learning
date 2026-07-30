@@ -38,3 +38,36 @@ model = nn.Sequential(nn.Linear(2, 1)).to(device)
 
 loss_fn = nn.BCEWithLogitsLoss()
 optimizer = torch.optim.SGD(params=model.parameters(), lr=0.01)
+
+x_train = torch.tensor(x_train, dtype=torch.float32).to(device)
+y_train = torch.tensor(y_train, dtype=torch.float32).to(device)
+
+x_test = torch.tensor(x_test, dtype=torch.float32).to(device)
+y_test = torch.tensor(y_test, dtype=torch.float32).to(device)
+
+def accuracy_fn(y_true, y_pred):
+    correct = torch.eq(y_true, y_pred).sum().item() # torch.eq() calculates where two tensors are equal
+    acc = (correct / len(y_pred)) * 100 
+    return acc
+
+epochs = 100
+for epoch in range(epochs):
+    model.train()
+    y_logits = model(x_train).squeeze()
+    y_pred = torch.round(torch.sigmoid(y_logits))
+    loss = loss_fn(y_logits, y_train)
+    acc = accuracy_fn(y_true=y_train, y_pred=y_pred)
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
+
+    model.eval()
+
+    with torch.inference_mode():
+        test_logits = model(x_test).squeeze()
+        test_pred = torch.round(torch.sigmoid(test_logits))
+        test_loss = loss_fn(test_logits, y_test)
+        test_acc = accuracy_fn(y_true=y_test, y_pred=test_pred)
+
+    if epoch % 10 == 0:
+        print(f"Epoch: {epoch} | Loss: {loss:.5f}, Accuracy: {acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
