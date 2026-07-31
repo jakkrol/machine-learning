@@ -34,10 +34,22 @@ print(len(x_train), len(x_test), len(y_train), len(y_test))
 #         return x
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model = nn.Sequential(nn.Linear(2, 1)).to(device)
+class model2(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.l1 = nn.Linear(2, 10)
+        self.l2 = nn.Linear(10, 10)
+        self.l3 = nn.Linear(10, 1)
+        self.relu = nn.ReLU()
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.l3(self.relu(self.l2(self.relu(self.l1(x)))))
+
+model = model2().to(device)
+print(model)
 
 loss_fn = nn.BCEWithLogitsLoss()
-optimizer = torch.optim.SGD(params=model.parameters(), lr=0.01)
+optimizer = torch.optim.SGD(params=model.parameters(), lr=0.1)
 
 x_train = torch.tensor(x_train, dtype=torch.float32).to(device)
 y_train = torch.tensor(y_train, dtype=torch.float32).to(device)
@@ -50,7 +62,7 @@ def accuracy_fn(y_true, y_pred):
     acc = (correct / len(y_pred)) * 100 
     return acc
 
-epochs = 100
+epochs = 1000
 for epoch in range(epochs):
     model.train()
     y_logits = model(x_train).squeeze()
@@ -69,5 +81,5 @@ for epoch in range(epochs):
         test_loss = loss_fn(test_logits, y_test)
         test_acc = accuracy_fn(y_true=y_test, y_pred=test_pred)
 
-    if epoch % 10 == 0:
+    if epoch % 100 == 0:
         print(f"Epoch: {epoch} | Loss: {loss:.5f}, Accuracy: {acc:.2f}% | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%")
