@@ -31,3 +31,4 @@ print(f"Image shape: {image.shape} | Label: {label}")
 BATCH_SIZE = 32
 train_dataloader = DataLoader(dataset=train_data, batch_size=BATCH_SIZE, shuffle=True)
 test_dataloader = DataLoader(dataset=test_data, batch_size=BATCH_SIZE, shuffle=False)
+
